@@ -1,0 +1,64 @@
+/* base.css – reset and CSS variables */
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  background: var(--bg-color);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+/* CSS Custom Properties – will be overridden by store settings at runtime */
+:root {
+  --primary-color: #1a73e8;
+  --secondary-color: #ffffff;
+  --accent-color: #ff9900;
+  --bg-color: #f5f5f5;
+  --bg-card: rgba(255,255,255,0.8);
+  --bg-glass: rgba(255,255,255,0.25);
+  --text-primary: #212121;
+  --text-secondary: #555555;
+  --link-color: var(--primary-color);
+  --border-radius: 0.5rem;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.15);
+  --transition: 0.2s ease-in-out;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --bg-color: #121212;
+  --bg-card: rgba(255,255,255,0.1);
+  --bg-glass: rgba(0,0,0,0.25);
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+}

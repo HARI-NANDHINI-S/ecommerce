@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-store-name>My Store</title>
+  <meta name="description" content="Premium white‑label e‑commerce store" />
+  <link rel="icon" href="/assets/favicon.svg" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script type="module" src="/js/main.js" defer></script>
+</head>
+<body class="theme-light">
+  <!-- Navbar -->
+  <header class="navbar" id="navbar"></header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <h1 class="hero-title" data-store-name>Store Name</h1>
+      <p class="hero-subtitle">Your tagline goes here</p>
+      <a href="/shop.html" class="btn-primary">Shop Now</a>
+    </div>
+  </section>
+
+  <!-- Featured Products -->
+  <section class="section" id="featured">
+    <h2 class="section-title">Featured</h2>
+    <div class="product-grid" id="featured-grid"></div>
+  </section>
+
+  <!-- Trending Products -->
+  <section class="section" id="trending">
+    <h2 class="section-title">Trending</h2>
+    <div class="product-grid" id="trending-grid"></div>
+  </section>
+
+  <!-- Categories Overview -->
+  <section class="section" id="categories">
+    <h2 class="section-title">Shop by Category</h2>
+    <div class="category-grid" id="category-grid"></div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" id="testimonials">
+    <h2 class="section-title">What Our Customers Say</h2>
+    <div class="testimonial-slider" id="testimonial-slider"></div>
+  </section>
+
+  <!-- Newsletter -->
+  <section class="section" id="newsletter">
+    <h2 class="section-title">Stay Updated</h2>
+    <form id="newsletter-form" class="newsletter-form">
+      <input type="email" placeholder="Your email" required />
+      <button type="submit" class="btn-primary">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="footer"></footer>
+
+  <!-- Toast container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script>
+    // Load dynamic store settings and render components
+    import { loadStoreSettings } from '/js/storeSettings.js';
+    loadStoreSettings();
+  </script>
+</body>
+</html>

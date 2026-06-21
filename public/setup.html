@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup Wizard – <span data-store-name>My Store</span></title>
+  <meta name="description" content="Configure your white‑label e‑commerce store" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <script type="module" src="/js/setup.js" defer></script>
+</head>
+<body class="theme-light">
+  <header class="navbar" id="navbar"></header>
+  <main class="container">
+    <h1 class="mt-3 mb-2">Welcome to the Store Setup</h1>
+    <form id="setup-form" class="setup-form">
+      <section class="mt-2">
+        <label for="store-name">Store Name</label>
+        <input type="text" id="store-name" name="store_name" required />
+      </section>
+      <section class="mt-2">
+        <label for="logo">Logo (PNG/SVG)</label>
+        <input type="file" id="logo" name="logo" accept="image/png,image/svg+xml" required />
+      </section>
+      <section class="mt-2">
+        <label for="favicon">Favicon (ICO/SVG)</label>
+        <input type="file" id="favicon" name="favicon" accept="image/x-icon,image/svg+xml" required />
+      </section>
+      <section class="mt-2">
+        <label for="primary-color">Primary Color</label>
+        <input type="color" id="primary-color" name="primary_color" value="#1a73e8" required />
+      </section>
+      <section class="mt-2">
+        <label for="secondary-color">Secondary Color</label>
+        <input type="color" id="secondary-color" name="secondary_color" value="#ffffff" required />
+      </section>
+      <section class="mt-2">
+        <label for="accent-color">Accent Color</label>
+        <input type="color" id="accent-color" name="accent_color" value="#ff9900" required />
+      </section>
+      <section class="mt-2">
+        <label for="currency">Currency (ISO code)</label>
+        <input type="text" id="currency" name="currency" value="USD" required />
+      </section>
+      <section class="mt-2">
+        <label for="support-email">Support Email</label>
+        <input type="email" id="support-email" name="support_email" required />
+      </section>
+      <section class="mt-2">
+        <label for="admin-email">First Admin Email</label>
+        <input type="email" id="admin-email" name="admin_email" required />
+      </section>
+      <section class="mt-3">
+        <button type="submit" class="btn-primary">Finish Setup</button>
+      </section>
+    </form>
+  </main>
+  <footer class="footer" id="footer"></footer>
+</body>
+</html>

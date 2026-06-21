@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-store-title>Store - Product</title>
+  <meta name="description" content="" data-store-description />
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="module" src="/assets/js/app.js" defer></script>
+</head>
+<body>
+  <header id="navbar"></header>
+  <main class="container">
+    <section id="product" class="product-page">
+      <div class="gallery" id="product-gallery"></div>
+      <div class="details">
+        <h1 id="product-title"></h1>
+        <p id="product-price" class="price"></p>
+        <div id="variant-selector" class="variants"></div>
+        <button id="add-to-cart" class="btn primary">Add to Cart</button>
+      </div>
+    </section>
+    <section id="reviews" class="reviews-section">
+      <h2>Customer Reviews</h2>
+      <div id="review-list"></div>
+      <form id="review-form" class="review-form">
+        <textarea placeholder="Write a review..." required></textarea>
+        <button type="submit" class="btn secondary">Submit</button>
+      </form>
+    </section>
+    <section id="related" class="related-products">
+      <h2>Related Products</h2>
+      <div class="grid" id="related-grid"></div>
+    </section>
+  </main>
+  <footer id="footer"></footer>
+  <div id="toast-container"></div>
+  <div id="modal-root"></div>
+</body>
+</html>

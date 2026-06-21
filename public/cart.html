@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cart – <span id="store-name"></span></title>
+  <link rel="stylesheet" href="/assets/css/style.css" />
+  <script type="module" src="/assets/js/app.js" defer></script>
+</head>
+<body>
+  <header id="navbar"></header>
+  <main class="container">
+    <h1 class="mt-3 mb-2">Your Cart</h1>
+    <div id="cart-items" class="grid"></div>
+    <section class="summary mt-3">
+      <p>Total: <span id="cart-total" class="price"></span></p>
+      <button id="checkout-btn" class="btn-primary">Proceed to Checkout</button>
+    </section>
+  </main>
+  <footer id="footer"></footer>
+  <div id="toast-container"></div>
+</body>
+</html>
