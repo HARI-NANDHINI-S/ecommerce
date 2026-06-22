@@ -17,7 +17,7 @@ This guide walks you through the **first‑time setup** of the white‑label e�
    - In Supabase Dashboard → Storage → Create bucket `store-assets`.
    - Set **public** read on `product-images/` and **RLS** for avatars (`avatars/{uid}/`).
 4. **Add environment variables**
-   - Copy `.env.example` → `.env` and fill in all values (Supabase keys, Razorpay keys, site URL, etc.).
+   - Copy `.env.example` → `.env` and fill in all values (Supabase keys, PayPal keys, site URL, etc.).
 5. **Run the setup wizard**
    - Deploy to Vercel (see deployment guide) and open the site.
    - If `store_settings` is empty you will be redirected to `/setup.html`.

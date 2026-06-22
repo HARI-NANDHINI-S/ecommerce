@@ -7,65 +7,26 @@
   <title data-store-name>My Store</title>
   <meta name="description" content="Premium white‑label e‑commerce store" />
   <link rel="icon" href="/assets/favicon.svg" />
-  <link rel="stylesheet" href="/css/style.css" />
-  <script type="module" src="/js/main.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/style.css" />
 </head>
 <body class="theme-light">
-  <!-- Navbar -->
-  <header class="navbar" id="navbar"></header>
-
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
-    <div class="hero-content">
-      <h1 class="hero-title" data-store-name>Store Name</h1>
-      <p class="hero-subtitle">Your tagline goes here</p>
-      <a href="/shop.html" class="btn-primary">Shop Now</a>
-    </div>
-  </section>
-
-  <!-- Featured Products -->
-  <section class="section" id="featured">
-    <h2 class="section-title">Featured</h2>
-    <div class="product-grid" id="featured-grid"></div>
-  </section>
-
-  <!-- Trending Products -->
-  <section class="section" id="trending">
-    <h2 class="section-title">Trending</h2>
-    <div class="product-grid" id="trending-grid"></div>
-  </section>
-
-  <!-- Categories Overview -->
-  <section class="section" id="categories">
-    <h2 class="section-title">Shop by Category</h2>
-    <div class="category-grid" id="category-grid"></div>
-  </section>
-
-  <!-- Testimonials -->
-  <section class="section" id="testimonials">
-    <h2 class="section-title">What Our Customers Say</h2>
-    <div class="testimonial-slider" id="testimonial-slider"></div>
-  </section>
-
-  <!-- Newsletter -->
-  <section class="section" id="newsletter">
-    <h2 class="section-title">Stay Updated</h2>
-    <form id="newsletter-form" class="newsletter-form">
-      <input type="email" placeholder="Your email" required />
-      <button type="submit" class="btn-primary">Subscribe</button>
-    </form>
-  </section>
-
-  <!-- Footer -->
-  <footer class="footer" id="footer"></footer>
+  <!-- Main app container for router -->
+  <div id="app"></div>
 
   <!-- Toast container -->
   <div id="toast-container" class="toast-container"></div>
 
+  <!-- Env config for static serving -->
   <script>
-    // Load dynamic store settings and render components
-    import { loadStoreSettings } from '/js/storeSettings.js';
-    loadStoreSettings();
+    window.ENV = {
+      SUPABASE_URL: localStorage.getItem('SUPABASE_URL') || 'https://lwdcrfeziaqblsxltncb.supabase.co',
+      SUPABASE_ANON_KEY: localStorage.getItem('SUPABASE_ANON_KEY') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx3ZGNyZmV6aWFxYmxzeGx0bmNiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwMDg2NjQsImV4cCI6MjA5NzU4NDY2NH0.YQ_Ek78X1vSIEycpm1PaMxoS9vqUaEZNWXD1hula69g',
+      PAYPAL_CLIENT_ID: localStorage.getItem('PAYPAL_CLIENT_ID') || 'AdxS6F0ifndqYODLstONTRgCxlCmwjt7LtMEhc4Ec6EF3DEY3qCVcSIaCO0UOjkjC6lNloQJap1UF_8b',
+      SITE_URL: window.location.origin,
+      USE_MOCK_API: false
+    };
   </script>
+
+  <script type="module" src="/assets/js/app.js"></script>
 </body>
 </html>

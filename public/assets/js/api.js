@@ -1,27 +1,38 @@
 // public/assets/js/api.js
 // Wrapper around Supabase client to call Edge Functions and basic DB queries.
 
-import { supabase } from './app.js';
+let supabase = null;
 
-const USE_MOCK_API = import.meta.env.VITE_USE_MOCK_API === 'true';
+// Lazy load supabase
+async function getSupabase() {
+  if (supabase) return supabase;
+  if (window.supabase) {
+    supabase = window.supabase;
+    return supabase;
+  }
+  throw new Error('Supabase not initialized');
+}
+
+const ENV = window.ENV || {};
+const USE_MOCK_API = ENV.USE_MOCK_API === true || ENV.USE_MOCK_API === 'true';
 
 // Helper to call a Supabase Edge Function (V1) with JSON payload
 async function callEdgeFunction(functionName, payload = {}) {
   if (USE_MOCK_API) {
     const mockResponses = {
-      'create-order': { order_id: 'MOCK_ORDER_123', key_id: 'MOCK_RAZORPAY_KEY' },
+      'create-order': { orderId: 'MOCK_ORDER_123', paypalOrderId: 'MOCK_PAYPAL_ORDER_123' },
       'verify-payment': { success: true },
       // add more mock responses as needed
     };
     console.info('[MOCK] Edge function →', functionName, payload);
     return mockResponses[functionName] ?? {};
   }
-  const url = `${import.meta.env.VITE_PUBLIC_SUPABASE_URL}/functions/v1/${functionName}`;
+  const url = `${ENV.SUPABASE_URL}/functions/v1/${functionName}`;
   const response = await fetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      apiKey: import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY,
+      apiKey: ENV.SUPABASE_ANON_KEY,
     },
     body: JSON.stringify(payload),
   });
@@ -32,42 +43,32 @@ async function callEdgeFunction(functionName, payload = {}) {
   return response.json();
 }
 
-headers: {
-  'Content-Type': 'application/json',
-    // Use the public anon key – safe for client side
-    apiKey: import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY,
-    },
-body: JSON.stringify(payload),
-  });
-if (!response.ok) {
-  const err = await response.text();
-  throw new Error(`Edge function ${functionName} failed: ${err}`);
-}
-return response.json();
-}
-
 // Store Settings – fetch from a simple table via Supabase client
 export async function getStoreSettings() {
-  const { data, error } = await supabase.from('store_settings').select('*').single();
+  const sb = await getSupabase();
+  const { data, error } = await sb.from('store_settings').select('*').single();
   if (error) throw error;
   return data;
 }
 
 export async function updateStoreSettings(patch) {
-  const { data, error } = await supabase.from('store_settings').update(patch).eq('id', 1).single();
+  const sb = await getSupabase();
+  const { data, error } = await sb.from('store_settings').update(patch).eq('id', 1).single();
   if (error) throw error;
   return data;
 }
 
 // Products
 export async function getProducts() {
-  const { data, error } = await supabase.from('products').select('*');
+  const sb = await getSupabase();
+  const { data, error } = await sb.from('products').select('*');
   if (error) throw error;
   return data;
 }
 
 export async function getProductById(id) {
-  const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
+  const sb = await getSupabase();
+  const { data, error } = await sb.from('products').select('*').eq('id', id).single();
   if (error) throw error;
   return data;
 }
@@ -77,7 +78,7 @@ export async function createOrder(orderPayload) {
   return callEdgeFunction('create-order', orderPayload);
 }
 
-// Verify payment – called after Razorpay redirects back
+// Verify payment – called after PayPal redirects back
 export async function verifyPayment(verificationPayload) {
   return callEdgeFunction('verify-payment', verificationPayload);
 }

@@ -1,9 +1,9 @@
 {
   "name": "ecommerce-white-label",
   "version": "1.0.0",
-  "description": "Vanilla HTML/CSS/JS white‑label e‑commerce store with Supabase and Razorpay",
+  "description": "Vanilla HTML/CSS/JS white‑label e‑commerce store with Supabase and PayPal",
   "scripts": {
-    "dev": "npx -y serve .",
+    "dev": "npx -y serve public",
     "lint": "eslint ./public/**/*.js",
     "test": "jest",
     "test:e2e": "playwright test"

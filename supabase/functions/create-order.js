@@ -1,9 +1,8 @@
 // supabase/functions/create-order.js
-// Edge Function to create an order and Razorpay order
+// Edge Function to create an order and PayPal order
 // This runs with the Supabase service role key (never exposed to client)
 
 import { createClient } from '@supabase/supabase-js';
-import Razorpay from 'razorpay';
 import crypto from 'crypto';
 
 // Initialize Supabase admin client
@@ -13,20 +12,80 @@ const supabase = createClient(
   { auth: { persistSession: false } }
 );
 
-// Initialize Razorpay SDK (server side)
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_SECRET, // using secret key for server SDK
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+// PayPal API endpoints
+const PAYPAL_API_URL = process.env.PAYPAL_MODE === 'live' 
+  ? 'https://api.paypal.com'
+  : 'https://api-m.sandbox.paypal.com';
+
+// Generate PayPal access token
+async function getPayPalAccessToken() {
+  const auth = Buffer.from(`${process.env.PUBLIC_PAYPAL_KEY_ID}:${process.env.PAYPAL_SECRET_KEY}`).toString('base64');
+  
+  const response = await fetch(`${PAYPAL_API_URL}/v1/oauth2/token`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${auth}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'grant_type=client_credentials',
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to get PayPal access token: ${response.statusText}`);
+  }
+
+  const data = await response.json();
+  return data.access_token;
+}
+
+// Create PayPal order
+async function createPayPalOrder(amount, currency = 'USD') {
+  const accessToken = await getPayPalAccessToken();
+
+  const response = await fetch(`${PAYPAL_API_URL}/v2/checkout/orders`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'PayPal-Request-Id': crypto.randomUUID(),
+    },
+    body: JSON.stringify({
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          amount: {
+            currency_code: currency,
+            value: amount.toFixed(2),
+          },
+        },
+      ],
+      payment_source: {
+        paypal: {
+          experience_context: {
+            payment_method_preference: 'IMMEDIATE',
+            brand_name: process.env.PUBLIC_STORE_NAME || 'Store',
+            locale: 'en-US',
+            landing_page: 'LOGIN',
+            return_url: `${process.env.PUBLIC_SITE_URL || 'http://localhost:5173'}/#/checkout`,
+            cancel_url: `${process.env.PUBLIC_SITE_URL || 'http://localhost:5173'}/#/cart`,
+          },
+        },
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to create PayPal order: ${response.statusText}`);
+  }
+
+  return await response.json();
+}
 
 export default async function handler(req, res) {
   try {
     // Expect JSON body with cart_id (or list of items) and optional address_id
-    const { cart_id, address_id } = req.body;
-    if (!cart_id) {
-      return res.status(400).json({ error: 'cart_id required' });
-    }
-
+    const { cart_id, address_id, items } = req.body;
+    
     // Get current user from auth header (Supabase JWT)
     const authHeader = req.headers.authorization || '';
     const token = authHeader.replace('Bearer ', '').trim();
@@ -51,7 +110,7 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Cart is empty' });
     }
 
-    // Calculate total amount (in smallest currency unit, e.g., paise)
+    // Calculate total amount
     let totalAmount = 0;
     for (const item of cartItems) {
       const { data: variant, error: varErr } = await supabase
@@ -72,24 +131,16 @@ export default async function handler(req, res) {
       totalAmount += price * item.quantity;
     }
 
-    // Convert to smallest unit (e.g., cents) – assume currency has 2 decimals
-    const amountCents = Math.round(totalAmount * 100);
-
-    // Create Razorpay order
-    const razorpayOrder = await razorpay.orders.create({
-      amount: amountCents,
-      currency: 'INR', // could be dynamic based on store_settings
-      receipt: crypto.randomUUID(),
-      payment_capture: 1,
-    });
+    // Create PayPal order
+    const paypalOrder = await createPayPalOrder(totalAmount, 'USD');
 
     // Insert order row (status pending)
     const { data: order, error: orderErr } = await supabase.from('orders').insert([
       {
         profile_id: profile.id,
         total_amount: totalAmount,
-        currency: 'INR',
-        razorpay_order_id: razorpayOrder.id,
+        currency: 'USD',
+        paypal_order_id: paypalOrder.id,
         status: 'pending',
       },
     ]).select('id');
@@ -109,13 +160,13 @@ export default async function handler(req, res) {
     // Optionally clear cart
     await supabase.from('cart_items').delete().eq('profile_id', profile.id);
 
-    // Respond with Razorpay order information for client checkout
+    // Respond with PayPal order information for client checkout
     return res.status(200).json({
       orderId,
-      razorpayOrderId: razorpayOrder.id,
-      amount: amountCents,
-      currency: 'INR',
-      publicKey: process.env.PUBLIC_RAZORPAY_KEY_ID,
+      paypalOrderId: paypalOrder.id,
+      amount: totalAmount,
+      currency: 'USD',
+      paypalStatus: paypalOrder.status,
     });
   } catch (e) {
     console.error('create-order error', e);

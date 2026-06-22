@@ -2,11 +2,11 @@
 
 ## White‑Label E‑Commerce Store
 
-A production‑ready, **vanilla** HTML/CSS/JavaScript e‑commerce platform built on **Supabase** (PostgreSQL, Auth, Storage, Edge Functions) and **Razorpay** for payments. The site is fully **white‑label** – branding, colors, logo, contact info, and currency are stored in a single `store_settings` row and can be changed without touching the code.
+A production‑ready, **vanilla** HTML/CSS/JavaScript e‑commerce platform built on **Supabase** (PostgreSQL, Auth, Storage, Edge Functions) and **PayPal** for payments. The site is fully **white‑label** – branding, colors, logo, contact info, and currency are stored in a single `store_settings` row and can be changed without touching the code.
 
 ### Features
 - Full CRUD admin panel (products, categories, coupons, orders, customers, analytics)
-- Secure payment flow – Razorpay secret never leaves the server, payments verified server‑side
+- Secure payment flow – PayPal credentials never exposed to client, payments verified server‑side with PayPal API
 - Row‑Level Security (RLS) everywhere – users can only access their own data
 - Dynamic theming via CSS variables populated from `store_settings`
 - Responsive, glassmorphism UI with dark/light mode and smooth micro‑animations
@@ -18,7 +18,7 @@ A production‑ready, **vanilla** HTML/CSS/JavaScript e‑commerce platform buil
 ### Tech Stack
 - **Frontend:** HTML, vanilla CSS, vanilla JS (ES6 modules)
 - **Backend:** Supabase (Postgres, Auth, Storage, Edge Functions)
-- **Payments:** Razorpay
+- **Payments:** PayPal (REST API v2)
 - **Deployment:** Vercel (static site + Serverless Functions)
 - **Email:** Resend (or custom SMTP)
 
@@ -73,10 +73,11 @@ PUBLIC_SUPABASE_URL=your-supabase-url
 PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-# Razorpay
-PUBLIC_RAZORPAY_KEY_ID=your-public-key-id
-RAZORPAY_KEY_SECRET=your-secret-key
-RAZORPAY_WEBHOOK_SECRET=your-webhook-secret
+# PayPal
+PUBLIC_PAYPAL_KEY_ID=your-paypal-client-id
+PAYPAL_SECRET_KEY=your-paypal-secret-key
+PAYPAL_WEBHOOK_SECRET=your-webhook-secret
+PAYPAL_MODE=sandbox  # or live
 
 # Site configuration (public, injected at build time)
 PUBLIC_SITE_URL=https://your-domain.com

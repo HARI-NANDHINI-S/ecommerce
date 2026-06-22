@@ -1,39 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Shop – <span id="store-name"></span></title>
-  <link rel="stylesheet" href="/assets/css/style.css" />
-  <script src="/assets/js/app.js" defer></script>
-</head>
-<body>
-  <!-- Navbar -->
-  <header id="navbar"></header>
+<header id="navbar"></header>
 
-  <main class="container">
-    <section class="hero">
-      <h1 id="hero-title"></h1>
-      <p id="hero-subtitle"></p>
-    </section>
+<main class="container">
+  <section class="hero">
+    <h1 id="hero-title"></h1>
+    <p id="hero-subtitle"></p>
+  </section>
 
-    <section class="filters">
-      <input type="text" id="search" placeholder="Search products..." />
-      <select id="category-filter"></select>
-      <select id="price-filter">
-        <option value="">All Prices</option>
-        <option value="0-50">0–50</option>
-        <option value="50-100">50–100</option>
-        <option value="100-200">100–200</option>
-        <option value="200+">200+</option>
-      </select>
-    </section>
+  <section class="filters">
+    <input type="text" id="search" placeholder="Search products..." />
+    <select id="category-filter"></select>
+    <select id="price-filter">
+      <option value="">All Prices</option>
+      <option value="0-50">0–50</option>
+      <option value="50-100">50–100</option>
+      <option value="100-200">100–200</option>
+      <option value="200+">200+</option>
+    </select>
+  </section>
 
-    <section id="product-list" class="grid"></section>
+  <section id="product-list" class="grid"></section>
 
-    <nav id="pagination" class="pagination"></nav>
-  </main>
+  <nav id="pagination" class="pagination"></nav>
+</main>
 
-  <footer id="footer"></footer>
-</body>
-</html>
+<footer id="footer"></footer>
+
